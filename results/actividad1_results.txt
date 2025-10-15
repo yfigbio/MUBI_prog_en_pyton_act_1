@@ -33,3 +33,61 @@ E: 39
 
 Gráfico de frecuencias de aminoácidos guardado en: ./results/aa_frequencies.png
 
+--- RESULTADOS 3.A ---
+Primeras 5 filas df_actividad:
+   id    dieta  pulsaciones  tiempo actividad
+0   1  low fat           85   1 min      rest
+1   1  low fat           85  15 min      rest
+2   1  low fat           88  30 min      rest
+3   2  low fat           90   1 min      rest
+4   2  low fat           92  15 min      rest
+
+Primeras 5 filas df_ciudades:
+   id   ciudad
+0   1  Mollina
+1   2  Mollina
+2   3  Mollina
+3   4  Mollina
+4   5  Mollina
+
+--- RESULTADOS 3.B ---
+Celdas vacías en df_actividad: 0
+Celdas vacías en df_ciudades: 0
+
+Celdas vacías después de limpiar df_actividad: 0
+Celdas vacías después de limpiar df_ciudades: 0
+
+--- RESULTADOS 3.C ---
+Frecuencia de cada nivel de dieta:
+dieta
+low fat    45
+no fat     45
+
+--- RESULTADOS 3.D ---
+Número de grupos creados: 3
+Resumen de cada grupo:
+Grupo 1: rest, número de filas: 30
+Grupo 2: running, número de filas: 30
+Grupo 3: walking, número de filas: 30
+
+--- RESULTADOS 3.E ---
+Frecuencia cardíaca media y desviación estándar por nivel de actividad:
+          pulsaciones           
+                 mean        std
+actividad                       
+rest        90.833333   5.831445
+running    113.066667  17.620390
+walking     95.200000   6.779279
+
+--- RESULTADOS 3.F ---
+Primeras 5 filas del DataFrame completo tras merge:
+   id    dieta  pulsaciones  tiempo actividad   ciudad
+0   1  low fat           85   1 min      rest  Mollina
+1   1  low fat           85  15 min      rest  Mollina
+2   1  low fat           88  30 min      rest  Mollina
+3   2  low fat           90   1 min      rest  Mollina
+4   2  low fat           92  15 min      rest  Mollina
+
+--- RESULTADOS 3.G ---
+Gráfico de pulsaciones vs tiempo según actividad y dieta guardado en: ./results/pulsaciones_vs_tiempo.png
+
