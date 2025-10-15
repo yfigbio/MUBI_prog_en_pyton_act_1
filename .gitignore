@@ -1,0 +1,8 @@
+# Archivos del entorno y cachés
+__pycache__/
+*.pyc
+.env/
+.venv/
+*.yml
+.DS_Store
+.vscode/
