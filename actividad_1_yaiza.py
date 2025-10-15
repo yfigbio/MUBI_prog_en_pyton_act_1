@@ -38,3 +38,35 @@ if os.path.exists(PDB_PATH):
 
 else:
     print(f" No se encontró el archivo: {PDB_PATH}")
+
+# --- PARTE 2.B: Extraer secuencia de aminoácidos (SEQRES) ---
+
+# Mapa de tres letras a una letra (aminoácidos estándar)
+three_to_one = {
+    'ALA':'A','ARG':'R','ASN':'N','ASP':'D','CYS':'C',
+    'GLN':'Q','GLU':'E','GLY':'G','HIS':'H','ILE':'I',
+    'LEU':'L','LYS':'K','MET':'M','PHE':'F','PRO':'P',
+    'SER':'S','THR':'T','TRP':'W','TYR':'Y','VAL':'V'
+}
+
+seqres_list = []  # lista donde guardaremos la secuencia
+
+if os.path.exists(PDB_PATH):
+    with open(PDB_PATH, 'r') as file:
+        for line in file:
+            if line.startswith("SEQRES"):
+                # Extraemos los nombres de residuos (aprox desde columna 19 en adelante)
+                residues = line[19:].split()
+                for res in residues:
+                    res = res.upper()
+                    if res in three_to_one:
+                        seqres_list.append(three_to_one[res])
+                    # ignoramos residuos no estándar
+
+    print("\n--- RESULTADOS 2.B ---")
+    print(f"Total aminoácidos extraídos: {len(seqres_list)}")
+    print("Primeros 50 aminoácidos:", "".join(seqres_list[:50]))
+
+else:
+    print(f"No se encontró el archivo: {PDB_PATH}")
+
