@@ -13,12 +13,47 @@ import os
 # --- RUTAS DE ARCHIVOS ---
 PDB_PATH = "/home/yaiza/Desktop/python_activity1_yai/1tup.pdb"
 
-# --- PARTE 2.A: Examinar el archivo y extraer TITLE y AUTHOR ---
+# Carpeta de resultados
+results_dir = "./results"
+os.makedirs(results_dir, exist_ok=True)
 
-# Comprobamos que el archivo existe antes de intentar abrirlo
+# Archivo principal de resultados
+main_results_path = os.path.join(results_dir, "actividad1_results.txt")
+# Abrimos en modo escritura 'w' para iniciar limpio
+with open(main_results_path, "w") as f:
+    f.write("=== Resultados de la Actividad 1 - Bioinformática ===\n\n")
+
+print(f"Carpeta 'results' creada y archivo principal '{main_results_path}' listo para guardar resultados")
+
+# --- SECCIÓN 2: MANIPULACIÓN DE ARCHIVOS DE TEXTO PLANO (PDB) ---
+
+import os
+from collections import Counter
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# --- RUTA DEL ARCHIVO PDB ---
+PDB_PATH = "/home/yaiza/Desktop/python_activity1_yai/1tup.pdb"
+
+# --- DICCIONARIO DE CONVERSIÓN 3 LETRAS -> 1 LETRA ---
+three_to_one = {
+    'ALA':'A','ARG':'R','ASN':'N','ASP':'D','CYS':'C',
+    'GLN':'Q','GLU':'E','GLY':'G','HIS':'H','ILE':'I',
+    'LEU':'L','LYS':'K','MET':'M','PHE':'F','PRO':'P',
+    'SER':'S','THR':'T','TRP':'W','TYR':'Y','VAL':'V'
+}
+
+# --- CARPETA Y ARCHIVO PRINCIPAL DE RESULTADOS ---
+results_dir = "./results"
+os.makedirs(results_dir, exist_ok=True)
+main_results_path = os.path.join(results_dir, "actividad1_results.txt")
+with open(main_results_path, "w") as f:
+    f.write("=== Resultados de la Actividad 1 - Bioinformática ===\n\n")
+print(f" Carpeta 'results' creada y archivo principal '{main_results_path}' listo para guardar resultados")
+
+# --- 2.A: EXTRAER TITLE Y AUTHOR ---
 if os.path.exists(PDB_PATH):
-    with open(PDB_PATH, 'r') as file: #abre el archivo y garantiza que se cierre automáticamente.
-        #Recorre cada línea y busca si empieza con "TITLE" o "AUTHOR".
+    with open(PDB_PATH, 'r') as file:
         title_lines = []
         author_lines = []
 
@@ -28,7 +63,6 @@ if os.path.exists(PDB_PATH):
             elif line.startswith("AUTHOR"):
                 author_lines.append(line.strip())
 
-    # Unimos las líneas fragmentadas con join para formar cadenas completas.
     title = " ".join(title_lines)
     author = " ".join(author_lines)
 
@@ -36,54 +70,68 @@ if os.path.exists(PDB_PATH):
     print("TITLE:", title)
     print("AUTHOR:", author)
 
+    with open(main_results_path, "a") as f:
+        f.write("--- RESULTADOS 2.A ---\n")
+        f.write(f"TITLE: {title}\n")
+        f.write(f"AUTHOR: {author}\n\n")
 else:
     print(f" No se encontró el archivo: {PDB_PATH}")
 
-# --- PARTE 2.B: Extraer secuencia de aminoácidos (SEQRES) ---
-
-# Mapa de tres letras a una letra (aminoácidos estándar)
-three_to_one = {
-    'ALA':'A','ARG':'R','ASN':'N','ASP':'D','CYS':'C',
-    'GLN':'Q','GLU':'E','GLY':'G','HIS':'H','ILE':'I',
-    'LEU':'L','LYS':'K','MET':'M','PHE':'F','PRO':'P',
-    'SER':'S','THR':'T','TRP':'W','TYR':'Y','VAL':'V'
-}
-
-seqres_list = []  # lista donde guardaremos la secuencia
+# --- 2.B: EXTRAER SECUENCIA DE AMINOÁCIDOS (SEQRES) ---
+seqres_list = []
 
 if os.path.exists(PDB_PATH):
     with open(PDB_PATH, 'r') as file:
         for line in file:
             if line.startswith("SEQRES"):
-                # Extraemos los nombres de residuos (aprox desde columna 19 en adelante)
                 residues = line[19:].split()
                 for res in residues:
                     res = res.upper()
                     if res in three_to_one:
                         seqres_list.append(three_to_one[res])
-                    # ignoramos residuos no estándar
 
     print("\n--- RESULTADOS 2.B ---")
     print(f"Total aminoácidos extraídos: {len(seqres_list)}")
     print("Primeros 50 aminoácidos:", "".join(seqres_list[:50]))
 
-else:
-    print(f"No se encontró el archivo: {PDB_PATH}")
+    with open(main_results_path, "a") as f:
+        f.write("--- RESULTADOS 2.B ---\n")
+        f.write(f"Total aminoácidos extraídos: {len(seqres_list)}\n")
+        f.write("Primeros 50 aminoácidos: " + "".join(seqres_list[:50]) + "\n\n")
 
-# --- PARTE 2.C: Contar aminoácidos y guardar en diccionario ---
-
-from collections import Counter
-
-# Creamos un diccionario con el conteo de cada aminoácido
-aa_counts = Counter(seqres_list)  # Counter devuelve un diccionario con clave=aminoácido y valor=frecuencia
-
-# Convertimos a dict normal (opcional)
+# --- 2.C: CONTAR AMINOÁCIDOS ---
+aa_counts = Counter(seqres_list)
 aa_counts_dict = dict(aa_counts)
 
 print("\n--- RESULTADOS 2.C ---")
 print("Conteo de aminoácidos (primeros 10):")
 for i, (aa, count) in enumerate(aa_counts_dict.items()):
-    if i < 10:  # mostramos solo los primeros 10 para no saturar
+    if i < 10:
         print(f"{aa}: {count}")
 
+with open(main_results_path, "a") as f:
+    f.write("--- RESULTADOS 2.C ---\n")
+    f.write("Conteo de aminoácidos:\n")
+    for aa, count in aa_counts_dict.items():
+        f.write(f"{aa}: {count}\n")
+    f.write("\n")
 
+# --- 2.D: GRÁFICO DE BARRAS Y GUARDADO ---
+aa_list = list(aa_counts_dict.keys())
+frequencies = list(aa_counts_dict.values())
+colors = sns.color_palette("hls", len(aa_list))
+
+# Guardar gráfico
+fig_path = os.path.join(results_dir, "aa_frequencies.png")
+plt.figure(figsize=(12,6))
+sns.barplot(x=aa_list, y=frequencies, palette=colors)
+plt.title("Frecuencia de aminoácidos en la proteína P53 (1TUP)")
+plt.xlabel("Aminoácido (una letra)")
+plt.ylabel("Frecuencia")
+plt.tight_layout()
+plt.savefig(fig_path)
+plt.close()
+print(f" Gráfico guardado en {fig_path}")
+
+with open(main_results_path, "a") as f:
+    f.write(f"Gráfico de frecuencias de aminoácidos guardado en: {fig_path}\n\n")
