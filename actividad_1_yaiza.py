@@ -70,3 +70,20 @@ if os.path.exists(PDB_PATH):
 else:
     print(f"No se encontró el archivo: {PDB_PATH}")
 
+# --- PARTE 2.C: Contar aminoácidos y guardar en diccionario ---
+
+from collections import Counter
+
+# Creamos un diccionario con el conteo de cada aminoácido
+aa_counts = Counter(seqres_list)  # Counter devuelve un diccionario con clave=aminoácido y valor=frecuencia
+
+# Convertimos a dict normal (opcional)
+aa_counts_dict = dict(aa_counts)
+
+print("\n--- RESULTADOS 2.C ---")
+print("Conteo de aminoácidos (primeros 10):")
+for i, (aa, count) in enumerate(aa_counts_dict.items()):
+    if i < 10:  # mostramos solo los primeros 10 para no saturar
+        print(f"{aa}: {count}")
+
+
